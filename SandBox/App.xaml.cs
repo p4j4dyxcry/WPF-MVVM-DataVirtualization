@@ -6,9 +6,6 @@ using System.Windows;
 
 namespace SandBox
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App
     {
         private static string[] _commandLineArgs;
@@ -24,13 +21,15 @@ namespace SandBox
         {
             base.OnStartup(e);
 
-            // C:ブラウジングするディレクトリをコマンドラインから取得します。
+            // ファイルを列挙するディレクトリをコマンドラインから取得します。
+            // 指定がない場合は C:ドライブ直下を列挙します。
             var targetDirectory = _commandLineArgs.Any() ? Path.GetFullPath(_commandLineArgs[0]) : "C:\\";
             
             // データソースの作成-------------------------------------------------------
             var dataSource = new DataSource<FileModel>();
 
             // データの列挙に利用する IEnumeratorです。
+            // Note: Directory.EnumerateFiles()とほぼ等価です。
             var dataSourceEnumerator = FileSystemEnumerator
                 .EnumerateFiles(targetDirectory)
                 .Select(x => new FileModel(x));
@@ -39,15 +38,15 @@ namespace SandBox
             _ = dataSource.StartRead(dataSourceEnumerator);
 
             // 仮想コンテナを作成--------------------------------------------------------
-            var defaultCapacityCount = 50;// 仮想コンテナを50にします。
+            var defaultCapacityCount = 50;// 仮想コンテナの初期サイズを50にします。
 
             var virtualSource = new VirtualCollectionSource<FileModel,FileViewModel>(
-                dataSource.Loaded,
-                x=>new FileViewModel(x), 
+                dataSource.Items,
+                x　=>　new FileViewModel(x), 
                 defaultCapacityCount,
                 ImmediateScheduler.Instance);
             
-            // データ50個読み込まれるまで待ちます。
+            // 初期データの50個が読み込まれるまで待ちます。
             dataSource.BlockUntilRead(defaultCapacityCount);
             await virtualSource.ResetCollection();
 

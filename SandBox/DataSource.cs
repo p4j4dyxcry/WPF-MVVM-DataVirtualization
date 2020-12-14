@@ -8,7 +8,7 @@ namespace SandBox
 {
     public class DataSource<T> : IDisposable
     {
-        public IEnumerable<T> Loaded => _bag;
+        public IEnumerable<T> Items => _bag;
         private readonly ConcurrentBag<T> _bag = new ConcurrentBag<T>();
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private bool _started = false;
