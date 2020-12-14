@@ -28,8 +28,10 @@
             <Label Content="Staged"/>
             <Label Content="{Binding StagedSize.Value}" Width="55"/>
 
-            <Label Content="Directory"/>
-            <Label Content="{Binding Directory}"/>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Directory"/>
+                <Label Content="{Binding Directory}"/>
+            </StackPanel>
 
         </WrapPanel>
         <ListView Grid.Row="1" ItemsSource="{Binding VirtualSource.Items}" 
@@ -40,9 +42,10 @@
             </b:Interaction.Behaviors>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="150"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="150" />
+                    <GridViewColumn Header="Size" DisplayMemberBinding="{Binding FileSize}" Width="100" />
                     <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Extension}" Width="70"/>
-                    <GridViewColumn Header="Path" DisplayMemberBinding="{Binding AbsolutePath}" Width="500"/>
+                    <GridViewColumn Header="Path" DisplayMemberBinding="{Binding AbsolutePath}"/>
                 </GridView>
             </ListView.View>
         </ListView>

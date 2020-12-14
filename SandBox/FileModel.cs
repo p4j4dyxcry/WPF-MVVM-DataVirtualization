@@ -11,6 +11,8 @@ namespace SandBox
         public string Name { get; }
         public string Extension { get; }
         public string AbsolutePath { get; }
+        
+        public long FileSize { get; }
 
         private readonly string _lowerName;
         private readonly string _lowerExtension;
@@ -20,6 +22,15 @@ namespace SandBox
             AbsolutePath = absolutePath;
             Extension = Path.GetExtension(absolutePath);
             Name = Path.GetFileName(absolutePath);
+            try
+            {
+                var info = new FileInfo(absolutePath);
+                FileSize = info.Length;
+            }
+            catch
+            {
+                // ignored
+            }
 
             _lowerName = Name.ToLower();
             _lowerExtension = Extension.ToLower();
