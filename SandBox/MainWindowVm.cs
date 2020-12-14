@@ -17,7 +17,7 @@ namespace SandBox
         public IReactiveProperty<int> CollectedSize { get; }
         public IReactiveProperty<int> VirtualProxySize { get; }
         public IReactiveProperty<int> StagedSize { get; }
-        public VirtualCollectionSource<FileModel> VirtualSource { get; }
+        public VirtualCollectionSource<FileModel,FileViewModel> VirtualSource { get; }
         
         private IReadOnlyReactiveProperty<string> LowerFilterName { get; }
         private IReadOnlyReactiveProperty<string> LowerFilterExtension { get; }
@@ -25,7 +25,7 @@ namespace SandBox
         private IList<IDisposable> Disposables { get; } = new List<IDisposable>();
         
         public MainWindowVm(string directory , 
-                            VirtualCollectionSource<FileModel> virtualSource)
+                            VirtualCollectionSource<FileModel,FileViewModel> virtualSource)
         {
             Directory        = directory;
             VirtualSource    = virtualSource;

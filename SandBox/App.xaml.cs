@@ -41,8 +41,9 @@ namespace SandBox
             // 仮想コンテナを作成--------------------------------------------------------
             var defaultCapacityCount = 50;// 仮想コンテナを50にします。
 
-            var virtualSource = new VirtualCollectionSource<FileModel>(
+            var virtualSource = new VirtualCollectionSource<FileModel,FileViewModel>(
                 dataSource.Loaded,
+                x=>new FileViewModel(x), 
                 defaultCapacityCount,
                 ImmediateScheduler.Instance);
             

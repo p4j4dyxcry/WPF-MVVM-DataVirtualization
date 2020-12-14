@@ -11,7 +11,6 @@ namespace SandBox
         public string Name { get; }
         public string Extension { get; }
         public string AbsolutePath { get; }
-        
         public long FileSize { get; }
 
         private readonly string _lowerName;

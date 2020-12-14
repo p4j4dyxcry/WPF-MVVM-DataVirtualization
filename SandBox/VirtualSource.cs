@@ -14,7 +14,7 @@ namespace SandBox
     /// 仮想化コレクション
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class VirtualCollectionSource<T> : IVirtualCollectionProvider , IDisposable
+    public class VirtualCollectionSource<T,U> : IVirtualCollectionProvider , IDisposable
     {
         private readonly IEnumerable<T> _dataSource;
         private readonly List<T> _proxy;
@@ -23,12 +23,12 @@ namespace SandBox
         private Func<T, bool> _filter;
         private CancellationTokenSource _prevCancelToken;
         private IList<IDisposable> Disposables { get; }= new List<IDisposable>();
-        public ReadOnlyReactiveCollection<T> Items { get; }
+        public ReadOnlyReactiveCollection<U> Items { get; }
         public int ProxySize => _proxy.Count;
         public int SourceSize => _dataSource.Count();
         public event EventHandler CollectionReset;
 
-        public VirtualCollectionSource(IEnumerable<T> dataSource, int initialSize , IScheduler scheduler)
+        public VirtualCollectionSource(IEnumerable<T> dataSource, Func<T,U> converter ,int initialSize , IScheduler scheduler)
         {
             _dataSource = dataSource;
             _proxy = new List<T>(_dataSource);
@@ -36,7 +36,7 @@ namespace SandBox
 
             var source = _proxy.Take(initialSize).ToArray();
             _collectionChangedTrigger = new Subject<CollectionChanged<T>>().AddTo(Disposables);
-            Items = source.ToReadOnlyReactiveCollection(_collectionChangedTrigger,scheduler, false ).AddTo(Disposables);
+            Items = source.ToReadOnlyReactiveCollection(_collectionChangedTrigger,converter,scheduler, false ).AddTo(Disposables);
         }
 
         /// <summary>
