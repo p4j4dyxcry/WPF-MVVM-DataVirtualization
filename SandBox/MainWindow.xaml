@@ -1,0 +1,51 @@
+﻿<Window x:Class="SandBox.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:sandBox="clr-namespace:SandBox"
+        d:DataContext="{d:DesignInstance sandBox:MainWindowVm}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid ShowGridLines="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <WrapPanel>
+            <Label Content="Search:"/>
+            <Label Content="Name"/>
+            <TextBox Margin="0,4" Text="{Binding FilterName.Value,UpdateSourceTrigger=PropertyChanged}" Width="80" />            
+            <Label Content="Extension"/>
+            <TextBox Margin="0,4" Text="{Binding FilterExtension.Value,UpdateSourceTrigger=PropertyChanged}" Width="80" />            
+
+           
+            <Label Content="Collected"/>
+            <Label Content="{Binding CollectedSize.Value}" Width="55"/>
+            <Label Content="Proxy"/>
+            <Label Content="{Binding VirtualProxySize.Value}" Width="55"/>
+            <Label Content="Staged"/>
+            <Label Content="{Binding StagedSize.Value}" Width="55"/>
+
+            <Label Content="Directory"/>
+            <Label Content="{Binding Directory}"/>
+
+        </WrapPanel>
+        <ListView Grid.Row="1" ItemsSource="{Binding VirtualSource.Items}" 
+                 ScrollViewer.CanContentScroll="True"
+                 VirtualizingPanel.ScrollUnit="Pixel">
+            <b:Interaction.Behaviors>
+                <sandBox:LazyLoadBehavior Provider="{Binding VirtualSource}"/>
+            </b:Interaction.Behaviors>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="150"/>
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Extension}" Width="70"/>
+                    <GridViewColumn Header="Path" DisplayMemberBinding="{Binding AbsolutePath}" Width="500"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+
+</Window>
